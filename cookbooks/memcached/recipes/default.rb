@@ -4,7 +4,7 @@ require 'pp'
 # Recipe:: default
 #
 
-node[:applications].each do |app_name,data|
+node[:members].each do |app_name,data|
   user = node[:users].first
 
 case node[:instance_role]
