@@ -35,6 +35,9 @@ case node[:instance_role]
 end
 
 if node[:instance_role].include?('util')
+
+  user = node[:users].first
+
   run_for_app(appname) do |app_name, data|
    template "/data/#{app_name}/shared/config/memcached_custom.yml" do
      source "memcached.yml.erb"
