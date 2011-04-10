@@ -9,7 +9,7 @@ node[:members].each do |app_name,data|
   user = node[:users].first
 
 case node[:instance_role]
- when "solo", "app", "app_master"
+ when "solo", "app", "app_master", "utility"
  run_for_app(appname) do |app_name, data|
    template "/data/#{app_name}/shared/config/memcached_custom.yml" do
      source "memcached.yml.erb"
