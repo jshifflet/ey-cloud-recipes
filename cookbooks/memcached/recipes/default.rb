@@ -3,12 +3,14 @@ require 'pp'
 # Cookbook Name:: memcached
 # Recipe:: default
 #
+appname = 'rails_3_production'
 
 node[:members].each do |app_name,data|
   user = node[:users].first
 
 case node[:instance_role]
  when "solo", "app", "app_master"
+ run_for_app(appname) do |app_name, data|
    template "/data/#{app_name}/shared/config/memcached_custom.yml" do
      source "memcached.yml.erb"
      owner user[:username]
@@ -28,5 +30,6 @@ case node[:instance_role]
      variables :memusage => 64,
                :port     => 11211
    end
+ end
  end
 end
