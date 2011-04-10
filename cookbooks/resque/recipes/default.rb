@@ -42,6 +42,13 @@ if ['solo', 'util'].include?(node[:instance_role])
         source "resque_#{count}.conf.erb"
         end
       end
+    
+    template "/data/#{app}/shared/config/resque.yml" do
+      owner node[:owner_name]
+      group node[:owner_name]
+      mode 0644
+      source "resque.yml.erb"
+    end    
 
     execute "ensure-resque-is-setup-with-monit" do 
       command %Q{ 
