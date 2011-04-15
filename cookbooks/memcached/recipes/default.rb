@@ -3,7 +3,7 @@ require 'pp'
 # Cookbook Name:: memcached
 # Recipe:: default
 #
-appname = 'rails_3_production'
+appname = 'rails3_staging'
 
 node[:members].each do |app_name,data|
   user = node[:users].first

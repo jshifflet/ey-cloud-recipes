@@ -4,7 +4,7 @@
 #
 
 # Set your application name here
-appname = "rails_3_production"
+appname = "rails3_staging"
 
 # Uncomment the flavor of sphinx you want to use
 flavor = "thinking_sphinx"
