@@ -71,4 +71,4 @@ require_recipe "resque"
 # additional configuration of this recipe is required
 #require_recipe "mysql_administrative_tools"
 
-require_recipe "sitemaps"
+#require_recipe "sitemaps"
