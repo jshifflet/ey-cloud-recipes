@@ -64,7 +64,7 @@ if ['solo', 'util'].include?(node[:instance_role])
   end 
 end
 
-appname = 'rails_3_production'
+appname = 'rails3_staging'
 
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
   run_for_app(appname) do |app_name, data|
