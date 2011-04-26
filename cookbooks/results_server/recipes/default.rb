@@ -8,7 +8,7 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
     }
   end
 
-  exectue 'start results server' do
+  execute 'start results server' do
     command %Q{
       cd /data/#{app_name}/current && nohup rake environment pikimal:start_result_server &
 
