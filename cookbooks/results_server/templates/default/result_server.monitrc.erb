@@ -1,0 +1,6 @@
+check process result_server_<%= @app_name %>_unix
+ with pidfile /data/<%= @app_name %>/current/tmp/pids/pikimal_results_<%= @node[:environment][:framework_env] %>.pid
+ start program = cd /data/<%= @app_name %>/current && rake environment pikimal:start_result_server
+ stop program = cd /data/<%= @app_name %>/current && rake environment pikimal:stop_result_server 
+  group result_server_<%= @app_name %>
+
