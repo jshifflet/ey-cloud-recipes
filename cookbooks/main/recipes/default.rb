@@ -72,3 +72,5 @@ require_recipe "resque"
 #require_recipe "mysql_administrative_tools"
 
 #require_recipe "sitemaps"
+require_recipe "results_server"
+
