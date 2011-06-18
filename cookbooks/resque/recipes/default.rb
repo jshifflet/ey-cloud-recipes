@@ -11,11 +11,11 @@ if ['solo', 'util'].include?(node[:instance_role])
 
   case node[:ec2][:instance_type]
     when 'm1.small'
-      worker_count = 16
+      worker_count = 10
     when 'c1.medium'
-      worker_count = 16
+      worker_count = 10
     when 'c1.xlarge'
-      worker_count = 16
+      worker_count = 10
     else 
         worker_count = 4
     end
