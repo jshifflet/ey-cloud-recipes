@@ -13,9 +13,9 @@ if ['solo', 'util'].include?(node[:instance_role])
     when 'm1.small'
       worker_count = 5
     when 'c1.medium'
-      worker_count = 10
+      worker_count = 11
     when 'c1.xlarge'
-      worker_count = 10
+      worker_count = 11
     else 
         worker_count = 4
     end
