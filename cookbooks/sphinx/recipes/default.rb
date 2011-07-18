@@ -114,7 +114,7 @@ if utility_name
       end
 
       execute "sphinx config" do
-        command "rake #{flavor}:configure"
+        command "bundle exec rake #{flavor}:configure"
         user node[:owner_name]
         environment({
           'HOME' => "/home/#{node[:owner_name]}",
@@ -128,7 +128,7 @@ if utility_name
       end
 
       execute "#{flavor} index" do
-        command "rake #{flavor}:index"
+        command "bundle exec rake #{flavor}:index"
         user node[:owner_name]
         environment({
           'HOME' => "/home/#{node[:owner_name]}",
@@ -229,7 +229,7 @@ else
       end
 
       execute "#{flavor} index" do
-        command "rake #{flavor}:index"
+        command "bundle exec rake #{flavor}:index"
         user node[:owner_name]
         environment({
           'HOME' => "/home/#{node[:owner_name]}",
@@ -248,7 +248,7 @@ else
           day     '*'
           month   '*'
           weekday '*'
-          command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} rake #{flavor}:index"
+          command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} bundle exec rake #{flavor}:index"
           user node[:owner_name]
         end
       end
