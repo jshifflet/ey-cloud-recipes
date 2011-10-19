@@ -2,7 +2,7 @@
 # Cookbook Name:: resque
 # Recipe:: default
 #
-if ['solo', 'util'].include?(node[:instance_role])
+if ['solo', 'util'].include?(node[:instance_role]) && ['resque','utility'].include?(node[:name])
   
   execute "install resque gem" do
     command "gem install resque redis redis-namespace yajl-ruby -r"
@@ -11,7 +11,7 @@ if ['solo', 'util'].include?(node[:instance_role])
 
   case node[:ec2][:instance_type]
     when 'm1.small'
-      worker_count = 5
+      worker_count = 11
     when 'c1.medium'
       worker_count = 11
     when 'c1.xlarge'
