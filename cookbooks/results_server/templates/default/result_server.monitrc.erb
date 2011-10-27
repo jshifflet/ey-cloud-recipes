@@ -1,5 +1,6 @@
 check process result_server_<%= @app_name %>_unix
   with pidfile /data/<%= @app_name %>/current/tmp/pids/pikimal_results_<%= @node[:environment][:framework_env] %>.pid
+  every "0/5 * * * *"
   start program = "/bin/sh -c  'cd /data/<%= @app_name %>/current && RAILS_ENV=<%= @node[:environment][:framework_env] %> bundle exec rake environment pikimal:start_result_server'" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds
   stop program = "/bin/sh -c 'cd /data/<%= @app_name %>/current && RAILS_ENV=<%= @node[:environment][:framework_env] %> bundle exec rake environment pikimal:stop_result_server'" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds
   group result_server_<%= @app_name %>
