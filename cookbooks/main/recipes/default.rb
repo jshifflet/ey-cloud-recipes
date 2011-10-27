@@ -74,3 +74,5 @@ require_recipe "resque"
 #require_recipe "sitemaps"
 require_recipe "results_server"
 
+#rdf search server config
+require_recipe "rdfserver"
