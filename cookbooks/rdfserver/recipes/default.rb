@@ -1,3 +1,5 @@
+appname = 'rails3_staging'
+
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
   run_for_app(appname) do |app_name, data|
     template "/data/#{app_name}/shared/config/rdfserver.yml" do
