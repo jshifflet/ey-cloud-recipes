@@ -1,7 +1,7 @@
-<% @node[:utility_instances].each do |util_hash| %>
+<%- @node[:utility_instances].each do |util_hash| -%>
 
-  <% if util_hash[:name] == 'rdfserver' || util_hash[:name] == 'jenaserver' %>
-    <%= @node[:environment][:framework_env] + ': ' + util_hash[:hostname] + ':3030/pikimal/query' %>
-  <% end %>
+  <%- if util_hash[:name] == 'rdfserver' || util_hash[:name] == 'jenaserver' -%>
+<%= @node[:environment][:framework_env] + ': ' + util_hash[:hostname] + ':3030/pikimal/query' %>
+  <%- end -%>
 
-<% end %>
+<%- end -%>
