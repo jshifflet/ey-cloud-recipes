@@ -1,3 +1,10 @@
+#!/bin/bash
+#
+# Take a look at the following link if you make changes that affect the RETVAL
+#
+# http://www.clusterlabs.org/doc/en-US/Pacemaker/1.0/html/Pacemaker_Explained/ap-lsb.html
+#
+
 RETVAL=0
 prog="results_server"
 rails_env=<%= @node[:environment][:framework_env] %>
@@ -5,47 +12,98 @@ app_dir=/data/<%= @app_name %>/current
 
 ensure_result_server_dead() {
   # ensure the result server is really dead
-  pkill ResultServer
+  pkill -f "ResultServer.+" &> /dev/null
   
-  rm $app_dir/tmp/sockets/pikimal_results_$rails_env.socket &> /dev/null
-  rm $app_dir/tmp/pids/pikimal_results_$rails_env.pid &> /dev/null
+  rm $app_dir/tmp/sockets/pikimal_results_$rails_env*.socket &> /dev/null
+  rm $app_dir/tmp/pids/pikimal_results_$rails_env*.pid &> /dev/null
+}
+
+master_running() {
+  pgrep -f "ResultServer master server.+" &> /dev/null
+}
+
+running_headless() {
+  master_running
+  
+  if [ $? -eq 0 ]; then
+    return 1
+  else
+    pkill -f ResultServer.+      
+  fi
 }
 
 start() {
-  pushd .
-  cd $app_dir
-
-  ensure_result_server_dead
-
-  RAILS_ENV=rails_env
-  bundle exec rake environment pikimal:start_result_server &> /dev/null
-
+  master_running
+  
   if [ $? -eq 0 ]; then
-    echo "Result Server started successfully."
-    RETVAL=0
+    echo "Result Server already running..."
   else
-    echo "Failed to start Result Server."
-    RETVAL=1
-  fi
+    running_headless
+    
+    if [ $? -eq 0 ]; then
+      ensure_result_server_dead
+    fi
+    
+    pushd . &> /dev/null
+    cd $app_dir
+    echo "Starting Result Server..."
+    RAILS_ENV=$rails_env
+    bundle exec rake environment pikimal:start_result_server &> /dev/null
 
-  popd
+    if [ $? -eq 0 ]; then
+      echo "Result Server started successfully."
+    else
+      echo "Failed to start Result Server."
+      RETVAL=1
+    fi
+
+    popd &> /dev/null    
+  fi
 }
 
 stop() {
-  pushd .
+  pushd . &> /dev/null
   cd $app_dir
 
-  RAILS_ENV=rails_env
-  bundle exec rake environment pikimal:stop_result_server &> /dev/null
+  echo "Stopping Result Server..."
+  # If the result server is running kill it via rake
 
+  master_running  
+  
+  if [ $? -eq 0 ]; then
+    RAILS_ENV=$rails_env
+    bundle exec rake environment pikimal:stop_result_server &> /dev/null
+  fi
+
+  # really make sure it's dead...
   ensure_result_server_dead
 
-  popd
+  echo "Result Server stopped..."
+
+  popd &> /dev/null
 }
 
 restart() {
   stop
   start
+}
+
+status() {
+  master_running
+  
+  if [ $? -eq 0 ]; then
+    echo "Result Server running..."
+  else
+    running_headless
+    
+    if [ $? -eq 0 ]; then    
+      echo "Result Server master dead but children still running..."
+      RETVAL=6
+    else
+      echo "Result Server not running..."
+      RETVAL=3
+    fi    
+  fi
 }
 
 case "$1" in
@@ -58,8 +116,11 @@ case "$1" in
   restart)
     restart
     ;;
+  status)
+    status
+    ;;
    *)
-    echo $"Usage: $0 {start|stop|restart}"
+    echo $"Usage: $0 {start|stop|restart|status}"
     RETVAL=1
 esac
 
