@@ -1,7 +1,7 @@
-check process result_server_<%= @app_name %>_unix
+check process result_server
   with pidfile /data/<%= @app_name %>/current/tmp/pids/pikimal_results_<%= @node[:environment][:framework_env] %>.pid
   every 10 cycles
-  start program = "/pikimal/bin/result_server.<%= @app_name %> start" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds
-  start program = "/pikimal/bin/result_server.<%= @app_name %> stop" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds  
-  group result_server_<%= @app_name %>
+  start = "/etc/init.d/result_server start" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds
+  stop = "/etc/init.d/result_server stop" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds  
+  group result_server
 
