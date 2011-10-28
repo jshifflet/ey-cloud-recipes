@@ -1,0 +1,66 @@
+RETVAL=0
+prog="results_server"
+rails_env=<%= @node[:environment][:framework_env] %>
+app_dir=/data/<%= @app_name %>/current
+
+ensure_result_server_dead() {
+  # ensure the result server is really dead
+  pkill ResultServer
+  
+  rm $app_dir/tmp/sockets/pikimal_results_$rails_env.socket &> /dev/null
+  rm $app_dir/tmp/pids/pikimal_results_$rails_env.pid &> /dev/null
+}
+
+start() {
+  pushd .
+  cd $app_dir
+
+  ensure_result_server_dead
+
+  RAILS_ENV=rails_env
+  bundle exec rake environment pikimal:start_result_server &> /dev/null
+
+  if [ $? -eq 0 ]; then
+    echo "Result Server started successfully."
+    RETVAL=0
+  else
+    echo "Failed to start Result Server."
+    RETVAL=1
+  fi
+
+  popd
+}
+
+stop() {
+  pushd .
+  cd $app_dir
+
+  RAILS_ENV=rails_env
+  bundle exec rake environment pikimal:stop_result_server &> /dev/null
+
+  ensure_result_server_dead
+
+  popd
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+   *)
+    echo $"Usage: $0 {start|stop|restart}"
+    RETVAL=1
+esac
+
+exit $RETVAL
