@@ -1,7 +1,8 @@
 check process result_server
   with pidfile /data/<%= @app_name %>/current/tmp/pids/pikimal_results_<%= @node[:environment][:framework_env] %>.pid
-  every 10 cycles
-  start = "/etc/init.d/result_server start" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds
-  stop = "/etc/init.d/result_server stop" as uid <%= @user %> and gid <%= @user %> with timeout 180 seconds  
+  every 10 cycles  
+  start program = "/bin/su pikimal -c '/etc/init.d/result_server start'"
+    with timeout 360 seconds  
+  stop program = "/bin/su pikimal -c '/etc/init.d/result_server stop'"
+    with timeout 360 seconds    
   group result_server
-
