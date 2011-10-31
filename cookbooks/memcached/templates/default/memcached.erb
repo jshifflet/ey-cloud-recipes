@@ -13,7 +13,7 @@ MEMCACHED_RUNAS="memcached"
  
 #Specify maximum number of concurrent connections
 #1024 is default
-MAXCONN="1024"
+MAXCONN="<%= @max_connections || 1024 %>"
  
 #Listen for connections on what address?
 # If this is empty, memcached will listen on 0.0.0.0

@@ -16,8 +16,11 @@ defaults:
   fast_hash: false
   fastest_hash: false
 
-<%= @node[:environment][:framework_env] %>:
-  memory: 64
+<%= @node[:environment][:framework_env] %>:  
+  <% if !@ttl.nil? %>
+  ttl: <%= @ttl %>  
+  <% end %>
+  memory: <%= @memory || 64 %>
   benchmarking: false
   sessions: false
   fragments: true
