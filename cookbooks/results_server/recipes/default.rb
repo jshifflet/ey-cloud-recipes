@@ -1,7 +1,7 @@
 app_name = 'rails_3_production'
 
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-  template "/etc/init.d/result_server" do
+  template "/etc/init.d/result_server.#{app_name}" do
     source "result_server_bin.erb"
     owner node[:owner_name]
     group node[:owner_name]
@@ -12,7 +12,7 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
     })
   end
   
-  template "/etc/monit.d/result_server.monitrc" do
+  template "/etc/monit.d/result_server.#{app_name}.monitrc" do
     source "result_server.monitrc.erb"
     owner node[:owner_name]
     group node[:owner_name]
