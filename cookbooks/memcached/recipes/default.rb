@@ -6,6 +6,27 @@ require 'pp'
 
 appname = 'rails3_staging'
 
+servers = []
+memory = 61560
+ttl = 604800
+
+node[:utility_instances].each do |node|
+  if node[:name]== 'memcached'
+    servers << node[:hostname]
+  end
+end
+
+# If the memcached server pool is empty (like if we're creating a staging 
+# enviornment) then we should just use the old members variable and have 
+# memcached have a small memory footprint.
+#
+# Better safe than sorry...
+if servers.empty?
+  memory = 64
+  servers = node[:members]
+end
+
+
 # If the server is a memcached box.
 if node[:name] == 'memcached'
   package "memcached" do
@@ -60,39 +81,26 @@ if node[:name] == 'memcached'
               :max_connections => max_connections,
               :port            => 11211
   end
-  
-# if it's any other kind of utility server...
-elsif node[:instance_role].include?('util')
-  user = node[:users].first
-
-  run_for_app(appname) do |app_name, data|
-    template "/data/#{app_name}/shared/config/memcached_custom.yml" do
-      source "memcached.yml.erb"
-      owner user[:username]
-      group user[:username]
-      mode 0744
-      variables({
-        :app_name => app_name,
-        :server_names => node[:members]
-      })
-    end
-  end    
 else
-  
-  servers = []
-  node[:utility_instances].each do |node|
-    if node[:name]== 'memcached'
-      servers << node[:hostname]
-    end
-  end
-  
-  memory = 61560
+  user = node[:users].first
   
   case node[:instance_role]
+  when "util"
+    run_for_app(appname) do |app_name, data|
+      template "/data/#{app_name}/shared/config/memcached_custom.yml" do
+        source "memcached.yml.erb"
+        owner user[:username]
+        group user[:username]
+        mode 0744
+        variables({
+          :ttl => ttl,
+          :memory => memory,
+          :app_name => app_name,
+          :server_names => servers
+        })
+      end
+    end    
   when "solo", "app", "app_master"
-    user = node[:users].first
-    ttl = 604800
-
     run_for_app(appname) do |app_name, data|
       template "/data/#{app_name}/shared/config/memcached_custom.yml" do
         source "memcached.yml.erb"
