@@ -3,7 +3,7 @@
 # Recipe:: default
 #
 
-app_name = 'rails3_staging'
+app_name = 'rails_3_production'
 env = node[:environment][:framework_env]
   
 # Adds the cronjob that warms the semantic template cache.
