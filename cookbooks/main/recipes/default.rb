@@ -76,3 +76,6 @@ require_recipe "results_server"
 
 #rdf search server config
 require_recipe "rdfserver"
+
+#pikimal specific recipes (USE SPARINGLY!)
+require_recipe "pikimal"
