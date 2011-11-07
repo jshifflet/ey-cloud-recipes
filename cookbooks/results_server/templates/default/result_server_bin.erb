@@ -6,7 +6,6 @@
 #
 
 RETVAL=0
-prog="results_server"
 rails_env=<%= @node[:environment][:framework_env] %>
 app_dir=/data/<%= @app_name %>/current
 
@@ -46,8 +45,11 @@ start() {
 
     cd $app_dir
     echo "Starting Result Server..."
-    RAILS_ENV=$rails_env
-    bundle exec rake environment pikimal:start_result_server &> /dev/null
+    
+    # Dropping a temp pid here for now.                                                                                               
+    echo $$ > $app_dir/tmp/pids/pikimal_results_$rails_env.pid
+    
+    RAILS_ENV=$rails_env bundle exec rake environment pikimal:start_result_server &> /dev/null
 
     if [ $? -eq 0 ]; then
       echo "Result Server started successfully."
@@ -66,8 +68,7 @@ stop() {
   
   if [ $? -eq 0 ]; then
     cd $app_dir
-    RAILS_ENV=$rails_env
-    bundle exec rake environment pikimal:stop_result_server &> /dev/null
+    RAILS_ENV=$rails_env bundle exec rake environment pikimal:stop_result_server &> /dev/null
     sleep 5
   fi
 
@@ -113,9 +114,8 @@ case "$1" in
   status)
     status
     ;;
-   *)
-    echo $"Usage: $0 {start|stop|restart|status}"
-    RETVAL=1
+  *)
+    status
 esac
 
 exit $RETVAL

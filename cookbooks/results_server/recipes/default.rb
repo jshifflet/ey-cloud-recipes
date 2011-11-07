@@ -22,5 +22,18 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
       :user => node[:owner_name],
     })
   end
+  
+  execute "ensure-result-server-is-running" do
+    user node[:owner_name]
+    command "/etc/init.d/result_server.#{app_name} restart"
+  end
+  
+  execute "ensure-result-server-is-setup-with-monit" do 
+    command "monit reload"
+  end
+
+  execute "restart-result-server" do 
+    command "echo \"sleep 20 && monit -g result_server_#{app_name} restart all\" | at now"
+  end  
 end
 
