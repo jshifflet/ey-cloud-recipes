@@ -24,7 +24,8 @@ utility_name = nil
 #
 # If you don't want scheduled reindexes, just leave this set to nil.
 # Setting it equal to 10 would run the cron job every 10 minutes.
-cron_interval = 10
+# Pikimal only runs the index once a day.
+# cron_interval = 10
 
 if utility_name
   if ['solo', 'app', 'app_master'].include?(node[:instance_role])
@@ -139,17 +140,15 @@ if utility_name
 
       execute "monit reload"
 
-      if cron_interval
-        cron "sphinx index" do
-          action  :create
-          minute  "*/#{cron_interval}"
-          hour    '*'
-          day     '*'
-          month   '*'
-          weekday '*'
-          command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} bundle exec rake #{flavor}:index"
-          user node[:owner_name]
-        end
+      cron "sphinx index" do
+        action  :create
+        minute  "0"
+        hour    '6'
+        day     '*'
+        month   '*'
+        weekday '*'
+        command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} bundle exec rake #{flavor}:index"
+        user node[:owner_name]
       end
     end
   end
@@ -240,17 +239,15 @@ else
 
       execute "monit reload"
 
-      if cron_interval
-        cron "sphinx index" do
-          action  :create
-          minute  "*/#{cron_interval}"
-          hour    '*'
-          day     '*'
-          month   '*'
-          weekday '*'
-          command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} bundle exec rake #{flavor}:index"
-          user node[:owner_name]
-        end
+      cron "sphinx index" do
+        action  :create
+        minute  "0"
+        hour    '6'
+        day     '*'
+        month   '*'
+        weekday '*'
+        command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} bundle exec rake #{flavor}:index"
+        user node[:owner_name]
       end
     end
   end
