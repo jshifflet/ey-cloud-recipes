@@ -10,7 +10,7 @@ memory = 61560
 ttl = 604800
 
 node[:utility_instances].each do |node|
-  if node[:name]== 'memcached'
+  if node[:name] == 'memcached' || node[:name] == 'utility'  
     servers << node[:hostname]
   end
 end
