@@ -23,7 +23,7 @@ if (['solo'].include?(node[:instance_role])) ||
     action :create
   end
 
-  warm_semantic_template_cache_cmd = "cd /data/#{app_name}/current && " + 
+  run_maps_cmd = "cd /data/#{app_name}/current && " + 
     "RAILS_ENV=#{env} " + 
     "bundle exec " + 
     "rake environment pikimal:run_maps"
@@ -32,7 +32,8 @@ if (['solo'].include?(node[:instance_role])) ||
     user node[:owner_name]
     hour "4"
     minute "0"
-    command ""
+    command run_maps_command
+    action :create
   end
   
 end
