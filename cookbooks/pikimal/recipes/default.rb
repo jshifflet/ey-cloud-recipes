@@ -32,7 +32,7 @@ if (['solo'].include?(node[:instance_role])) ||
     user node[:owner_name]
     hour "4"
     minute "0"
-    command run_maps_command
+    command run_maps_cmd
     action :create
   end
   
