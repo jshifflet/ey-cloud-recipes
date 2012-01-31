@@ -16,7 +16,7 @@ flavor = "thinking_sphinx"
 # deploy may fail because the initial database migration will not have
 # run by the time this executes on the utility instance. If that occurs
 # just deploy again and the recipe should succeed.
-utility_name = nil
+utility_name = "rdfserver"
 
 # If you want to have scheduled reindexes in cron, enter the minute
 # interval here. This is passed directly to cron via /, so you should
