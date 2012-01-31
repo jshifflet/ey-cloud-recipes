@@ -28,6 +28,7 @@ utility_name = "rdfserver"
 # cron_interval = 10
 
 if utility_name
+  sphinx_host = node[:utility_instances].find {|u| u[:name] == utility_name }[:hostname]
   if ['solo', 'app', 'app_master'].include?(node[:instance_role])
     run_for_app(appname) do |app_name, data|
       ey_cloud_report "Sphinx" do
@@ -49,7 +50,8 @@ if utility_name
         variables({
           :app_name => app_name,
           :user => node[:owner_name],
-          :mem_limit => 32
+          :mem_limit => 32,
+          :address => sphinx_host
         })
       end
     end
