@@ -27,8 +27,11 @@ if ['solo', 'app_master'].include?(node[:instance_role])
 end
 
 if ['solo', 'app_master', 'app'].include?(node[:instance_role])
+  link "/data/#{app_name}/current/public/robots.txt" do
+    action :delete
+  end
+
   template "/data/#{app_name}/shared/public/robots.txt" do
-    mode 0640
-    source "robots.txt.#{app_name}.erb"
+    action :delete
   end
 end
