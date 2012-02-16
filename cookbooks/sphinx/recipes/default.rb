@@ -16,7 +16,7 @@ flavor = "thinking_sphinx"
 # deploy may fail because the initial database migration will not have
 # run by the time this executes on the utility instance. If that occurs
 # just deploy again and the recipe should succeed.
-utility_name = nil
+utility_name = "rdfserver"
 
 # If you want to have scheduled reindexes in cron, enter the minute
 # interval here. This is passed directly to cron via /, so you should
@@ -28,6 +28,7 @@ utility_name = nil
 # cron_interval = 10
 
 if utility_name
+  sphinx_host = node[:utility_instances].find {|u| u[:name] == utility_name }[:hostname]
   if ['solo', 'app', 'app_master'].include?(node[:instance_role])
     run_for_app(appname) do |app_name, data|
       ey_cloud_report "Sphinx" do
@@ -49,7 +50,8 @@ if utility_name
         variables({
           :app_name => app_name,
           :user => node[:owner_name],
-          :mem_limit => 32
+          :mem_limit => 32,
+          :address => sphinx_host
         })
       end
     end
@@ -98,7 +100,8 @@ if utility_name
         variables({
           :app_name => app_name,
           :user => node[:owner_name],
-          :flavor => flavor
+          :flavor => flavor,
+          :address => 'localhost'
         })
       end
 

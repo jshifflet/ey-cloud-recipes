@@ -79,3 +79,9 @@ require_recipe "rdfserver"
 
 #pikimal specific recipes (USE SPARINGLY!)
 require_recipe "pikimal"
+
+#load fortran through emerge
+require_recipe "fortran"
+
+#load R
+require_recipe "R"

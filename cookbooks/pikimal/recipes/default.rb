@@ -6,12 +6,10 @@
 app_name = 'rails3_staging'
 env = node[:environment][:framework_env]
   
-# Adds the cronjob that warms the semantic template cache.
-#
-# App_master really isn't the best place for this, but EngineYard seems to
-# think so. I really don't want to fight with EngineYard so I'll just do it 
-# their stupid way.
-if ['solo', 'app_master'].include?(node[:instance_role])
+# Adds the cronjob that warms the semantic template cache and runs maps.
+
+if (['solo'].include?(node[:instance_role])) ||
+    (node[:instance_role] == 'util' && ['utility','resque'].include?(node[:name]))
   warm_semantic_template_cache_cmd = "cd /data/#{app_name}/current && " + 
     "RAILS_ENV=#{env} " + 
     "bundle exec " + 
@@ -24,6 +22,20 @@ if ['solo', 'app_master'].include?(node[:instance_role])
     command warm_semantic_template_cache_cmd
     action :create
   end
+
+  run_maps_cmd = "cd /data/#{app_name}/current && " + 
+    "RAILS_ENV=#{env} " + 
+    "bundle exec " + 
+    "rake environment pikimal:run_maps"
+  
+  cron "pikimal:run_maps" do
+    user node[:owner_name]
+    hour "4"
+    minute "0"
+    command run_maps_cmd
+    action :create
+  end
+  
 end
 
 if ['solo', 'app_master', 'app'].include?(node[:instance_role])
