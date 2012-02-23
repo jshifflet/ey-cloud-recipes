@@ -3,7 +3,7 @@
 # Recipe:: default
 #
 if ['solo', 'util'].include?(node[:instance_role]) && ['resque','utility'].include?(node[:name])
-  
+
   execute "install resque gem" do
     command "gem install resque redis redis-namespace yajl-ruby -r"
     not_if { "gem list | grep resque" }
