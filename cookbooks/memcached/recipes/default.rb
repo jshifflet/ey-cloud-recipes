@@ -4,8 +4,6 @@ require 'pp'
 # Recipe:: default
 #
 
-appname = 'rails3_staging'
-
 servers = []
 memory = 61560
 ttl = 604800
@@ -86,7 +84,7 @@ else
   
   case node[:instance_role]
   when "util"
-    run_for_app(appname) do |app_name, data|
+    node[:applications].each do |app_name, data|
       template "/data/#{app_name}/shared/config/memcached_custom.yml" do
         source "memcached.yml.erb"
         owner user[:username]
@@ -101,7 +99,7 @@ else
       end
     end    
   when "solo", "app", "app_master"
-    run_for_app(appname) do |app_name, data|
+    node[:applications].each do |app_name, data|
       template "/data/#{app_name}/shared/config/memcached_custom.yml" do
         source "memcached.yml.erb"
         owner user[:username]
