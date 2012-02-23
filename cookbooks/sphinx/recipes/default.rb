@@ -97,8 +97,8 @@ if utility_name
         variables({
           :app_name => app_name,
           :user => node[:owner_name],
-          :flavor => flavor,
-          :address => 'localhost'
+          :env => node[:environment][:framework_env],
+          :flavor => flavor
         })
       end
 
@@ -110,7 +110,8 @@ if utility_name
         variables({
           :app_name => app_name,
           :user => node[:owner_name],
-          :mem_limit => 32
+          :mem_limit => 32,
+          :address => 'localhost'
         })
       end
 
