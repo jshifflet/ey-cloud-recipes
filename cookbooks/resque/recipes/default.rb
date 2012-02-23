@@ -64,10 +64,8 @@ if ['solo', 'util'].include?(node[:instance_role]) && ['resque','utility'].inclu
   end 
 end
 
-appname = 'rails_3_production'
-
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-  run_for_app(appname) do |app_name, data|
+  node[:applications].each do |app_name, data|
     template "/data/#{app_name}/shared/config/resque.yml" do
       owner node[:owner_name]
       group node[:owner_name]

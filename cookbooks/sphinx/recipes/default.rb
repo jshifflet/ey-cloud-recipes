@@ -3,9 +3,6 @@
 # Recipe:: default
 #
 
-# Set your application name here
-appname = "rails_3_production"
-
 # Uncomment the flavor of sphinx you want to use
 flavor = "thinking_sphinx"
 #flavor = "ultrasphinx"
@@ -30,7 +27,7 @@ utility_name = "rdfserver"
 if utility_name
   sphinx_host = node[:utility_instances].find {|u| u[:name] == utility_name }[:hostname]
   if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-    run_for_app(appname) do |app_name, data|
+    node[:applications].each do |app_name, data|
       ey_cloud_report "Sphinx" do
         message "configuring #{flavor}"
       end
@@ -58,7 +55,7 @@ if utility_name
   end
 
   if node[:name] == utility_name
-    run_for_app(appname) do |app_name, data|
+    node[:applications].each do |app_name, data|
       ey_cloud_report "Sphinx" do
         message "configuring #{flavor}"
       end
@@ -157,7 +154,7 @@ if utility_name
   end
 else
   if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-    run_for_app(appname) do |app_name, data|
+    node[:applications].each do |app_name, data|
       ey_cloud_report "Sphinx" do
         message "configuring #{flavor}"
       end
