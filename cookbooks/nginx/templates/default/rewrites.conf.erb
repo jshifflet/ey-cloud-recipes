@@ -1,0 +1,8 @@
+# Custom server level rewrites go here.
+# This means that you can also enter custom rewrite locations here.
+
+# Remove www from any domain and redirect.
+if ($host ~* www\.(.*)) {
+  set $host_without_www $1;
+  rewrite ^(.*)$ $scheme://$host_without_www$1 permanent;
+}
