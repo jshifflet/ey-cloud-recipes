@@ -17,9 +17,8 @@ if ['solo', 'util'].include?(node[:instance_role]) && ['resque','utility'].inclu
     when 'c1.xlarge'
       worker_count = 11
     else 
-        worker_count = 4
+      worker_count = 4
     end
-  
 
     node[:applications].each do |app, data|
       template "/etc/monit.d/resque_#{app}.monitrc" do 

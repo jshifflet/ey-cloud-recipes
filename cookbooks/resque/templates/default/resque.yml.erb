@@ -1,1 +1,1 @@
-production: <%= @node[:db_host] %>:6379
+<%=@node[:environment][:framework_env] %>: <%=@node[:db_host] %>:6379
