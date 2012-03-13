@@ -1,4 +1,4 @@
-if ['solo', 'app', 'app_master'].include?(node[:instance_role])
+if ['solo', 'app', 'app_master'].include?(node[:instance_role])  && File.exists?("/data/#{app_name}/current")
   node[:applications].each do |app_name, data|
     template "/etc/init.d/result_server.#{app_name}" do
       source "result_server_bin.erb"
