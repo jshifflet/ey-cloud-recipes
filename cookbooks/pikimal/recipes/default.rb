@@ -42,7 +42,7 @@ node[:applications].each do |app_name, data|
       "rake environment pikimal:document_current_autotemplates " +
       " >> /data/#{app_name}/current/log/template_counts.log"
     
-    cron "pikimal:run_maps" do
+    cron "pikimal:document_current_autotemplates" do
       user node[:owner_name]
       hour "*"
       minute "0"
