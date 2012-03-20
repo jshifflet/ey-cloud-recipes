@@ -36,20 +36,6 @@ node[:applications].each do |app_name, data|
       action :create
     end
     
-    run_maps_cmd = "cd /data/#{app_name}/current && " + 
-      "RAILS_ENV=#{env} " + 
-      "bundle exec " + 
-      "rake environment pikimal:document_current_autotemplates " +
-      " >> /data/#{app_name}/current/log/template_counts.log"
-    
-    cron "pikimal:template_counts" do
-      user node[:owner_name]
-      hour "*"
-      minute "0"
-      command run_maps_cmd
-      action :create
-    end
-    
   end
 
   if ['solo', 'app_master', 'app'].include?(node[:instance_role])
