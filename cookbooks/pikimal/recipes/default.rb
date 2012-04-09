@@ -39,7 +39,7 @@ node[:applications].each do |app_name, data|
     set_similarity_data_cmd = "cd /data/#{app_name}/current && " + 
       "RAILS_ENV=#{env} " + 
       "bundle exec " + 
-      "rake environment pikimal::set_similarity_data"
+      "rake environment pikimal:set_similarity_data"
     
     cron "pikimal:set_similarity_data" do
       user node[:owner_name]
