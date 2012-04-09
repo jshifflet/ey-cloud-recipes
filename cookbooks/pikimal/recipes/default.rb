@@ -36,6 +36,19 @@ node[:applications].each do |app_name, data|
       action :create
     end
     
+    set_similarity_data_cmd = "cd /data/#{app_name}/current && " + 
+      "RAILS_ENV=#{env} " + 
+      "bundle exec " + 
+      "rake environment pikimal::set_similarity_data"
+    
+    cron "pikimal:set_similarity_data" do
+      user node[:owner_name]
+      hour "3"
+      minute "30"
+      command set_similarity_data_cmd
+      action :create
+    end
+    
   end
 
   if ['solo', 'app_master', 'app'].include?(node[:instance_role])
