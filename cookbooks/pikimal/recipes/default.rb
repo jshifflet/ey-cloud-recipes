@@ -49,6 +49,19 @@ node[:applications].each do |app_name, data|
       action :create
     end
     
+    update_offers_cmd = "cd /data/#{app_name}/current && " + 
+      "RAILS_ENV=#{env} " + 
+      "bundle exec " + 
+      "rake environment pikimal:update_offers"
+    
+    cron "pikimal:update_offers" do
+      user node[:owner_name]
+      hour "2"
+      minute "0"
+      command update_offers_cmd
+      action :create
+    end
+    
   end
 
   if ['solo', 'app_master', 'app'].include?(node[:instance_role])
